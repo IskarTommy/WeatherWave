@@ -1,24 +1,146 @@
 {% extends "weather/base.html" %}
 
 {% block content %}
-<div class="hero">
-    <h1>WeatherWave</h1>
-    <form method="get">
-        <input type="text" name="location" placeholder="Enter city name">
-        <button type="submit">Search</button>
-    </form>
-    {% if weather %}
-        {% if weahter.error %}
-            <p class="error">Error: {{  weather.error }}</p>
-        {% else %}
-            <div class="weahter-result">
-                <h2>{{ weather.city }}</h2>
-                <img src="{{ weather.icon }}" alt="weather icon">
-                <p>{{ weather.description }}</p>
-                <p>Temperature: {{ weather.temperature }}°C</p>
-                <p>Humidity: {{ weather.humidity }}%</p>
+<div class="dashboard-container">
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="search-card">
+            <div class="search-header">
+                <i class="fas fa-search-location"></i>
+                <h3>Search Location</h3>
             </div>
-        {% endif %}
-    {% endif %}        
+            <form method="get" class="search-form">
+                <input type="text" 
+                       name="location" 
+                       placeholder="Enter city, ZIP code or use current location">
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-grid">
+        <!-- Left Column -->
+        <div class="weather-column">
+            {% if weather %}
+                {% if weather.error %}
+                <div class="error-card">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ weather.error }}
+                </div>
+                {% else %}
+                <!-- Current Weather -->
+                <div class="current-weather-card">
+                    <div class="weather-header">
+                        <h2 class="location">{{ weather.city }}</h2>
+                        <div class="weather-meta">
+                            <span class="temperature">{{ weather.temperature }}°C</span>
+                            <span class="condition">{{ weather.description }}</span>
+                        </div>
+                    </div>
+
+                    <div class="weather-body">
+                        <div class="weather-icon">
+                            <img src="{{ weather.icon }}" alt="Current Weather">
+                        </div>
+                        
+                        <div class="weather-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-temperature-high"></i>
+                                <div>
+                                    <label>Feels Like</label>
+                                    <span>{{ weather.feelslike }}°C</span>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-tint"></i>
+                                <div>
+                                    <label>Humidity</label>
+                                    <span>{{ weather.humidity }}%</span>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-wind"></i>
+                                <div>
+                                    <label>Wind</label>
+                                    <span>{{ weather.wind_speed }} km/h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-info-circle"></i>
+                            View Details
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-star"></i>
+                            Add to Favorites
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Weather Alert -->
+                {% if weather.alerts %}
+                <div class="alert-card warning">
+                    <div class="alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h4>Weather Alert</h4>
+                        <p>{{ weather.alerts }}</p>
+                    </div>
+                    <button class="alert-dismiss">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- Right Column -->
+        <div class="favorites-column">
+            <div class="favorites-card">
+                <div class="card-header">
+                    <i class="fas fa-heart"></i>
+                    <h3>Favorite Locations</h3>
+                </div>
+                
+                <div class="favorites-list">
+                    <!-- Sample Items -->
+                    <div class="favorite-item">
+                        <div class="weather-preview">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <div class="location-info">
+                            <h4>New York</h4>
+                            <div class="location-meta">
+                                <span class="temp">18°C</span>
+                                <span class="condition">Cloudy</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="favorite-item">
+                        <div class="weather-preview sunny">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="location-info">
+                            <h4>Los Angeles</h4>
+                            <div class="location-meta">
+                                <span class="temp">28°C</span>
+                                <span class="condition">Sunny</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
